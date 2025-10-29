@@ -7,80 +7,112 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DaoArticle implements IDao<Article> {
-    Transaction Tx=null;
-    private List<Article> articles = new CopyOnWriteArrayList<>();
     private static DaoArticle instance = new DaoArticle();
 
-    // private DaoArticle() {
-    //     //articles = findAll();
-    //     // articles.add(new Article("Art1","Article1",120));
-    //     // articles.add(new Article("Art2","Article2",150));
-    //     // articles.add(new Article("Art3","Article3",180));
-    // }
-    // Singleton simple pour partager la même instance dans toute l'application
+    private DaoArticle() {
+    }
+
     public static DaoArticle getInstance() {
         return instance;
     }
 
     public List<Article> findAll() {
-        // return new ArrayList<>(articles);
-        List<Article> articles = new ArrayList<Article>();
+        List<Article> articles = new ArrayList<>();
+        Session session = null;
+        Transaction tx = null;
 
         try {
-            Session S= HibernateUtil.getSessionFactory().openSession();
-            Tx =S.beginTransaction();
-            System.err.println("LISTING ARTICLES SUCCESS");
-            String Req ="FROM Article";
-            articles = S.createQuery(Req).list();
-            Tx.commit();
-        }
-        catch (Exception e)
-        {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            articles = session.createQuery("FROM Article", Article.class).list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
         }
         return articles;
     }
 
     public Article findByCode(String code) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Article article = session.get(Article.class, code);
-        session.close();
+        Session session = null;
+        Article article = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            article = session.get(Article.class, code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) session.close();
+        }
         return article;
     }
 
     public boolean create(Article article) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction  tx = session.beginTransaction();
+        Session session = null;
+        Transaction tx = null;
 
-        Article art = session.get(Article.class, article.getCode());
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
 
-        if (art != null) {
-            session.close();
+            Article existing = session.get(Article.class, article.getCode());
+            if (existing != null) {
+                return false;
+            }
+
+            session.save(article);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
             return false;
+        } finally {
+            if (session != null) session.close();
         }
-        session.save(article);
-        tx.commit();
-        session.close();
-        return true;
     }
 
     public boolean update(Article article) {
+        Session session = null;
+        Transaction tx = null;
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.update(article);
-        tx.commit();
-        session.close();
-        return true;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            session.update(article);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (session != null) session.close();
+        }
     }
 
     public boolean delete(String code) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        Article article = session.get(Article.class, code);
-        session.delete(article);
-        tx.commit();
-        session.close();
-        return true;
+        Session session = null;
+        Transaction tx = null;
+
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            tx = session.beginTransaction();
+            Article article = session.get(Article.class, code);
+            if (article != null) {
+                session.delete(article);
+            }
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (session != null) session.close();
+        }
     }
 }

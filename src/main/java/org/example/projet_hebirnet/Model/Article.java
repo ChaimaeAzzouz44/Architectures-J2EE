@@ -2,38 +2,34 @@ package org.example.projet_hebirnet.Model;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "article")
 public class Article {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false, length = 50)
     private String code;
 
     @Column(name = "designation", nullable = false, length = 100)
     private String designation;
 
-    @Column(name = "prix", nullable = false, precision = 10, scale = 2)
+    @Column(name = "prix", nullable = false)
     private Float prix;
-
 
     public Article() {
     }
 
-    public Article(String code, String designation, float prix) {
-        this.prix = prix;
-        this.designation = designation;
+    public Article(String code, String designation, Float prix) {
         this.code = code;
+        this.designation = designation;
+        this.prix = prix;
     }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String id) {
-        this.code = id;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDesignation() {
@@ -51,5 +47,4 @@ public class Article {
     public void setPrix(Float prix) {
         this.prix = prix;
     }
-
 }

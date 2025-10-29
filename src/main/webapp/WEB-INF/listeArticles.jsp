@@ -1,176 +1,205 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Dell
-  Date: 07/10/2025
-  Time: 22:16
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Liste des Articles</title>
-    <%--
-  Created by IntelliJ IDEA.
-  User: Dell
-  Date: 07/10/2025
-  Time: 22:16
-  To change this template use File | Settings | File Templates.
---%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <html>
-    <head>
-        <title>Liste des Articles</title>
-        <%--
-  Created by IntelliJ IDEA.
-  User: Dell
-  Date: 07/10/2025
-  Time: 22:16
---%>
-        <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-        <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-        <html>
-        <head>
-            <title>Liste des Articles</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    background: linear-gradient(to right, #f8f9fa, #e9ecef);
-                    margin: 0;
-                    padding: 0;
-                }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-                h1 {
-                    text-align: center;
-                    margin-top: 40px;
-                    color: #343a40;
-                }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
 
-                table {
-                    width: 80%;
-                    margin: 30px auto;
-                    border-collapse: collapse;
-                    background-color: #ffffff;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                    border-radius: 10px;
-                    overflow: hidden;
-                }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
 
-                thead {
-                    background-color: #007bff;
-                    color: #ffffff;
-                }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
 
-                th, td {
-                    padding: 14px 18px;
-                    text-align: center;
-                    border-bottom: 1px solid #dee2e6;
-                }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-                tbody tr:hover {
-                    background-color: #f1f3f5;
-                }
+        thead {
+            background-color: #2196F3;
+        }
 
-                a, button {
-                    display: inline-block;
-                    padding: 6px 12px;
-                    text-decoration: none;
-                    border-radius: 4px;
-                    font-size: 14px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
-                }
+        th {
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+        }
 
-                a {
-                    background-color: #17a2b8;
-                    color: white;
-                }
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
 
-                a:hover {
-                    background-color: #138496;
-                }
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
 
-                button {
-                    background-color: #dc3545;
-                    color: white;
-                    border: none;
-                }
+        td {
+            padding: 15px;
+            text-align: center;
+            color: #333;
+        }
 
-                button:hover {
-                    background-color: #c82333;
-                }
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
 
-                .add-btn {
-                    display: block;
-                    width: 200px;
-                    margin: 30px auto;
-                    text-align: center;
-                    background-color: #28a745;
-                    color: white;
-                    padding: 12px;
-                    font-size: 16px;
-                    font-weight: bold;
-                    border-radius: 6px;
-                    text-decoration: none;
-                    transition: background-color 0.3s ease;
-                }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
 
-                .add-btn:hover {
-                    background-color: #218838;
-                }
+        .btn:hover {
+            opacity: 0.8;
+        }
 
-                /* Responsive */
-                @media (max-width: 768px) {
-                    table {
-                        width: 95%;
-                        font-size: 14px;
-                    }
-                    th, td {
-                        padding: 10px;
-                    }
-                    .add-btn {
-                        width: 80%;
-                        font-size: 14px;
-                    }
-                }
-            </style>
+        .btn-edit {
+            background-color: #FF9800;
+        }
 
+        .btn-delete {
+            background-color: #f44336;
+        }
+
+        .btn-add {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .btn-add:hover {
+            opacity: 0.8;
+        }
+
+        .add-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 10px 5px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .btn {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Liste des Articles</h1>
+<div class="container">
+    <h1>Liste des Articles</h1>
 
-<table>
-    <thead>
-    <tr>
-        <th>Code</th>
-        <th>Désignation</th>
-        <th>Prix</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="article" items="${articles}">
+    <table>
+        <thead>
         <tr>
-            <td>${article.code}</td>
-            <td>${article.designation}</td>
-            <td>${article.prix}</td>
-            <td>
-                <a href="app?action=edit&code=${article.code}">Modifier</a>
-                <form action="app" method="post" style="display:inline;">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="code" value="${article.code}">
-                    <button type="submit">Supprimer</button>
-                </form>
-            </td>
+            <th>Code</th>
+            <th>Désignation</th>
+            <th>Prix</th>
+            <th>Actions</th>
         </tr>
-    </c:forEach>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <c:choose>
+            <c:when test="${empty articles}">
+                <tr>
+                    <td colspan="4" class="empty-state">
+                        Aucun article disponible
+                    </td>
+                </tr>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="article" items="${articles}">
+                    <tr>
+                        <td>${article.code}</td>
+                        <td>${article.designation}</td>
+                        <td>${article.prix} DH</td>
+                        <td>
+                            <div class="actions">
+                                <a href="app?action=edit&code=${article.code}" class="btn btn-edit">
+                                    Modifier
+                                </a>
+                                <form action="app" method="post" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="code" value="${article.code}">
+                                    <button type="submit" class="btn btn-delete"
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
+        </tbody>
+    </table>
 
-<br>
-<a href="app?action=new">Ajouter un Article</a>
+    <div class="add-container">
+        <a href="app?action=new" class="btn-add">
+            Ajouter un Article
+        </a>
+    </div>
+</div>
 </body>
 </html>
-
