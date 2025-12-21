@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
+             version="3.2">
+    <persistence-unit name="gfelierelevePU" transaction-type="RESOURCE_LOCAL">
+
+        <!-- Provider Hibernate -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Entités JPA -->
+        <class>org.example.getsionecolefeliere.Model.Filiere</class>
+        <class>org.example.getsionecolefeliere.Model.Eleve</class>
+        <class>org.example.getsionecolefeliere.Model.DossierAdministratif</class>
+        <class>org.example.getsionecolefeliere.Model.Cours</class>
+
+
+        <!-- Exclure les classes non annotées -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <!-- Configuration JDBC MySQL -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url"
+                      value="jdbc:mysql://localhost:3306/gfelierecole"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+
+            <!-- Dialecte Hibernate pour MySQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+
+            <!-- Gestion automatique du schéma -->
+            <!-- Options: create, create-drop, update, validate, none -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <!-- Afficher les requêtes SQL dans la console -->
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!-- Formater les requêtes SQL pour une meilleure lisibilité -->
+            <property name="hibernate.format_sql" value="true"/>
+
+            <!-- Commenter les requêtes SQL -->
+            <property name="hibernate.use_sql_comments" value="true"/>
+
+            <!-- Pool de connexions C3P0 (recommandé pour production) -->
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3000"/>
+
+            <!-- Stratégie de génération des ID -->
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+
+            <!-- Cache de second niveau (optionnel) -->
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+
+            <!-- Encodage UTF-8 -->
+            <property name="hibernate.connection.characterEncoding" value="utf8"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
+
+            <!-- Gestion des transactions -->
+            <property name="hibernate.current_session_context_class" value="thread"/>
+
+            <!-- Statistiques Hibernate (pour debug) -->
+            <property name="hibernate.generate_statistics" value="false"/>
+
+        </properties>
+
+    </persistence-unit>
+</persistence>
